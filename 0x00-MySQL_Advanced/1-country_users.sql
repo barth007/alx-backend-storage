@@ -1,21 +1,9 @@
 -- This script creates a table called users
 
 DELIMITER $$
-DROP PROCEDURE IF EXISTS create_detail $$
 
 CREATE PROCEDURE create_detail()
 BEGIN
-  -- DECLARE id INT;
-  -- DECLARE email VARCHAR(255);
-  -- DECLARE name VARCHAR(255);
-  -- DECLARE country ENUM;
-
-
-  -- SET id = 0;
-  -- SET email = '';
-  -- SET name = '';
-  -- SET country ='US';
-
 
   CREATE TABLE IF NOT EXISTS users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
