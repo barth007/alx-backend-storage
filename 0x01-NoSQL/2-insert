@@ -1,0 +1,7 @@
+// This script creates a collection and adds an attribute with
+// their respective values
+
+
+db.school.insertOne({
+    "name": "Holberton school"
+})
