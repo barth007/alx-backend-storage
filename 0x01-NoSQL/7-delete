@@ -1,0 +1,4 @@
+// This script delete all documents that passes a match
+db.school.deleteMany(
+   {name: "Holberton school"}
+)
