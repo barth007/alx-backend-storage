@@ -2,7 +2,6 @@
 """
 This script inserts a new document in a collection based on kwargs
 """
-import pymongo
 
 
 def insert_school(mongo_collection, **kwargs):
@@ -10,7 +9,7 @@ def insert_school(mongo_collection, **kwargs):
     it inserts a new document in a collection
     """
 
-    item = dict(kwargs)
+    item = kwargs
     mongo_collection.insert_one(item)
     return mongo_collection.inserted_id
 
