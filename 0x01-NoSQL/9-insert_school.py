@@ -13,3 +13,7 @@ def insert_school(mongo_collection, **kwargs):
     item = dict(kwargs)
     mongo_collection.insert_one(item)
     return mongo_collection.inserted_id
+
+
+if __name__ == "__main__":
+    insert_school(mongo_collection, **kwargs)
