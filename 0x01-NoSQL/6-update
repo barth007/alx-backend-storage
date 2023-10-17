@@ -1,0 +1,5 @@
+// This script update all the files that passes a match
+db.school.updateMany(
+    {name: "Holberton school"},
+    {$set: {address: "972 Mission street"}}
+)
