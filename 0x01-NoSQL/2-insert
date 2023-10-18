@@ -2,5 +2,5 @@
 
 
 db.school.insertOne({
-    "name": "Holberton school"
+    name: 'Holberton school'
 })
