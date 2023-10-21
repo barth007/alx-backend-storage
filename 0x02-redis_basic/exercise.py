@@ -8,33 +8,33 @@ import uuid
 from functools import wraps
 
 
-def count_calls(func: Callable[[None], None]) -> Callable:
+def count_calls(method):
     """
     This is decorator that counts the number times
     a method in the Cache is called
     """
 
-    @wraps(func)
+    @wraps(method)
     def wrapper_func(self, *args, **kwargs):
-        key = func.__qualname__
+        key = method.__qualname__
         self._redis.incr(key)
-        return func(self, *args, **kwargs)
+        return method(self, *args, **kwargs)
     return wrapper_func
 
 
-def call_history(func):
+def call_history(method):
     """
     This is a decorator that adds the input and output to a
     redis list
     """
 
-    @wraps(func)
+    @wraps(method)
     def wrapper_func(self, *args, **kwargs):
-        input_key = f"{func.__qualname__}:inputs"
-        output_key = f"{func.__qualname__}:outputs"
+        input_key = f"{method.__qualname__}:inputs"
+        output_key = f"{method.__qualname__}:outputs"
         inputs = str(args)
         self._redis.rpush(input_key, inputs)
-        result = func(self, *args, **kwargs)
+        result = method(self, *args, **kwargs)
         self._redis.rpush(output_key, result)
         return result
     return wrapper_func
