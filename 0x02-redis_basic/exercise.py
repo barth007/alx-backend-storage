@@ -2,7 +2,7 @@
 """
 exercise.py
 """
-from typing import Union, Optional, Callable
+from typing import Union, Optional, Callable, List, Tuple
 import redis
 import uuid
 from functools import wraps
@@ -38,6 +38,25 @@ def call_history(method: Callable) -> Callable:
         self._redis.rpush(output_key, result)
         return result
     return wrapper_func
+
+
+def replay(method: Callable) -> str:
+    """
+    This displays the history of calls of a particular function
+    """
+
+    input_key = f"{method.__qualname__}:inputs"
+    out_key = f"{method.__qualname__}:outputs"
+    keys_input = method.__self__._redis.lrange(input_key, 0, -1)
+    keys_ouput = method.__self__._redis.lrange(out_key, 0, -1)
+    method_count = method.__self__._redis.get(
+            method.__qualname__).decode('utf-8')
+    print(f"{method.__qualname__} was called {method_count} times:")
+    new_list = list(zip(keys_input, keys_ouput))
+    for inputs, outputs in new_list:
+        value_O = outputs.decode('utf-8')
+        value_I = inputs.decode('utf-8')
+        print(f"{method.__qualname__}(*('{value_I}')) -> {value_O}")
 
 
 class Cache:
