@@ -54,9 +54,8 @@ def replay(method: Callable) -> str:
     print(f"{method.__qualname__} was called {method_count} times:")
     new_list = list(zip(keys_input, keys_ouput))
     for inputs, outputs in new_list:
-        value_O = outputs.decode('utf-8')
-        value_I = inputs.decode('utf-8')
-        print(f"{method.__qualname__}(*('{value_I}')) -> {value_O}")
+        value_O, value_I = outputs.decode('utf-8'), inputs.decode('utf-8')
+        print(f"{method.__qualname__}(*({value_I})) -> {value_O}")
 
 
 class Cache:
