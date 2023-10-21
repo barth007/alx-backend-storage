@@ -5,6 +5,39 @@ exercise.py
 from typing import Union, Optional, Callable
 import redis
 import uuid
+from functools import wraps
+
+
+def count_calls(func: Callable[[None], None]) -> Callable:
+    """
+    This is decorator that counts the number times
+    a method in the Cache is called
+    """
+
+    @wraps(func)
+    def wrapper_func(self, *args, **kwargs):
+        key = func.__qualname__
+        self._redis.incr(key)
+        return func(self, *args, **kwargs)
+    return wrapper_func
+
+
+def call_history(func):
+    """
+    This is a decorator that adds the input and output to a
+    redis list
+    """
+
+    @wraps(func)
+    def wrapper_func(self, *args, **kwargs):
+        input_key = f"{func.__qualname__}:inputs"
+        output_key = f"{func.__qualname__}:outputs"
+        inputs = str(args)
+        self._redis.rpush(input_key, inputs)
+        result = func(self, *args, **kwargs)
+        self._redis.rpush(output_key, result)
+        return result
+    return wrapper_func
 
 
 class Cache:
@@ -17,6 +50,8 @@ class Cache:
         self._redis = redis.Redis(host=host, port=port, db=db)
         self._redis.flushdb()
 
+    @call_history
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         The method stores a data with a random get key
@@ -36,10 +71,10 @@ class Cache:
         if not self._redis.exists(key):
             return None
         value = self._redis.get(key)
-        if fn is not None:
-            return fn(value)
-        else:
-            return value
+        if fn:
+            for func in fn:
+                value = fn(value)
+        return value
 
     def get_int(self, key: str) -> int:
         """
