@@ -22,7 +22,7 @@ def count_calls(method: Callable) -> Callable:
     return wrapper_func
 
 
-def call_history(method: Callable) ->Callable:
+def call_history(method: Callable) -> Callable:
     """
     This is a decorator that adds the input and output to a
     redis list
