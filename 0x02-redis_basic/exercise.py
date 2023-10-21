@@ -8,7 +8,7 @@ import uuid
 from functools import wraps
 
 
-def count_calls(method):
+def count_calls(method: Callable) -> Callable:
     """
     This is decorator that counts the number times
     a method in the Cache is called
@@ -22,7 +22,7 @@ def count_calls(method):
     return wrapper_func
 
 
-def call_history(method):
+def call_history(method: Callable) ->Callable:
     """
     This is a decorator that adds the input and output to a
     redis list
