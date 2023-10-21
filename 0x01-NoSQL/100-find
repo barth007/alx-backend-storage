@@ -1,0 +1,5 @@
+// This script list all the document that start with Holberton in the collection
+
+var query
+query = {name: {$regex: "Holberton"}}
+db.school.find(query)
